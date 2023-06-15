@@ -1,4 +1,4 @@
-<h1 style="text-align: center">Resaltador de Sintáxis Instructivo</h1>
+<h1 style="text-align: center">Resaltador de Sintáxis Paralelo Instructivo</h1>
 <p> Materia
 
 <ul>
