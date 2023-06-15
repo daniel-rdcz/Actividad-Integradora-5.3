@@ -530,6 +530,29 @@ end
     char in ["=", ">", "<", "/", "*", "+", "%", "!"]
   end
 end
-Py.writter("base-file.py", "highlighted-sintaxis1.html")
-Py.writter("base-file2.py", "highlighted-sintaxis2.html")
-Py.writter("base-file3.py", "highlighted-sintaxis3.html")
+
+start_time_static = :os.system_time(:millisecond)
+
+Py.writter("../Python/Files/base-file.py", "highlighted-sintaxis1.html")
+Py.writter("../Python/Files/base-file2.py", "highlighted-sintaxis2.html")
+Py.writter("../Python/Files/base-file3.py", "highlighted-sintaxis3.html")
+
+end_time_static = :os.system_time(:millisecond)
+execution_time_static = end_time_static - start_time_static
+
+IO.puts("Tiempo de ejecucion estatica: #{execution_time_static} milisegundos")
+
+
+start_time_parallel = :os.system_time(:millisecond)
+
+{:ok, files} = File.ls("../Python/Files")
+files
+  |> Enum.map(&Task.async(fn -> Py.writter("../Python/Files/#{&1}", "#{&1}.html") end))
+  |> Enum.map(&Task.await(&1))
+
+end_time_parallel = :os.system_time(:millisecond)
+execution_time_parallel = end_time_parallel - start_time_parallel
+
+IO.puts("Tiempo de ejecucion paralelo: #{execution_time_parallel} milisegundos")
+
+IO.puts("Speedup: #{execution_time_static / execution_time_parallel}")
